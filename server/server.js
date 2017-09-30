@@ -38,11 +38,11 @@ app.get('/todos/:id', (req, res) => {
   var id = req.params.id;     /******First time using params here**********/
 
   if(!ObjectId.isValid(id)){
-    return res.status(404).send(err);
+    return res.status(404).send();
   }
   TodoModel.findById(id).then((todo) => {
     if(!todo){
-      return res.status(404).send(err);
+      return res.status(404).send();
     }
     res.send({todo});
     }, (err) =>{
