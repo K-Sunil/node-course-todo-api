@@ -14,6 +14,10 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json())
 
+/*
+**** Todo routes *******
+*/
+
 app.post('/todos', (req, res) => {
   var newTodo = new TodoModel({
     text: req.body.text
@@ -92,6 +96,23 @@ app.patch('/todos/:id', (req, res) => {
     res.send({todo});
   }).catch((e) => {
     res.status(404).send();
+  });
+
+});
+
+/*
+**** User routes *******
+*/
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email','password']);
+  var newUser = new UserModel(body);
+
+  newUser.save().then(() => {
+    return newUser.generateAuthToken();
+  }).then((token) =>{
+    res.header('x-auth',token).send(newUser);
+  }).catch((e) => {
+    res.status(400).send(e);
   });
 
 });
